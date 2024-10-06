@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - auth-service
+      - transaction-service
+
+  auth-service:
+    image: bank/auth-service:latest
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/auth
+    depends_on:
+      - db
+
+  transaction-service:
+    image: bank/transaction-service:latest
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/transactions
+    depends_on:
+      - db
+
+  reporting-service:
+    image: bank/reporting-service:latest
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/reports
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bank
+
+networks:
+  default:
+    driver: bridge

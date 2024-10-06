@@ -1,0 +1,45 @@
+{
+    "aws_vpc": {
+      "Name": "MyVPC",
+      "cidr_block": "10.0.0.0/16"
+    },
+    "aws_subnet": {
+      "Name": "PublicSubnet",
+      "cidr_block": "10.0.1.0/24",
+      "availability_zone": "us-east-1a"
+    },
+    "aws_security_group": {
+      "Name": "WebSG",
+      "description": "Allow HTTP and SSH",
+      "ingress_rules": [
+        {
+          "from_port": 80,
+          "to_port": 80,
+          "protocol": "tcp",
+          "cidr_blocks": ["0.0.0.0/0"]
+        },
+        {
+          "from_port": 22,
+          "to_port": 22,
+          "protocol": "tcp",
+          "cidr_blocks": ["0.0.0.0/0"]
+        }
+      ]
+    },
+    "aws_instance": {
+      "Name": "WebServer",
+      "ami": "ami-0c55b159cbfafe1f0",
+      "instance_type": "t2.micro",
+      "subnet": "PublicSubnet",
+      "security_group": "WebSG"
+    },
+    "aws_rds_instance": {
+      "Name": "MySQLDatabase",
+      "engine": "mysql",
+      "instance_class": "db.t2.micro",
+      "allocated_storage": 20,
+      "subnet_group": "PublicSubnet",
+      "security_group": "WebSG"
+    }
+  }
+  

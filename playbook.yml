@@ -1,0 +1,25 @@
+---
+- name: Set up banking web server
+  hosts: bank_servers
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Configure firewall
+      ufw:
+        rule: allow
+        port: "80"
+        proto: tcp
+
+    - name: Copy web app content
+      copy:
+        src: /local/path/to/frontend
+        dest: /var/www/html
